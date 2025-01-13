@@ -1,109 +1,60 @@
-# SMBUS
-SMBus Device Scanner and Reader
+README for SMBus/I2C Device Tool
+Description
 
-This Python script is designed to interact with the System Management Bus (SMBus), a subset of the I2C protocol. It provides functionality to:
+This Python script provides tools for interacting with SMBus/I2C devices. It supports scanning for devices, reading from and writing to device registers, saving scan results, and real-time data monitoring.
+Features
 
-    Scan the SMBus for connected devices.
-
-    Read data from a specific device and register on the SMBus.
+    Scan SMBus: Identify active I2C devices on the bus.
+    Read Data: Read a byte of data from a specific device register.
+    Write Data: Write a byte of data to a specific device register.
+    Save Scan Results: Save detected device addresses to a JSON file.
+    Real-Time Monitoring: Continuously read and display data at regular intervals.
 
 Requirements
-Hardware
 
-    A system with SMBus/I2C hardware (e.g., a Raspberry Pi or a similar embedded device).
+    Python 3
+    smbus2 library: Install using pip install smbus2.
 
-    Devices connected to the SMBus/I2C bus.
-
-Software
-
-    Python 3.x
-
-    smbus2 library
-
-Installation
-
-    Install Python 3.x on your system if not already installed.
-
-    Install the smbus2 library:
-    pip install smbus2
+    Note: The script is designed for Linux systems, as Windows does not support smbus2 due to the dependency on fcntl.
 
 Usage
-Code Overview
-Constants
 
-    SMBUS_BUS: Specifies the SMBus bus number (e.g., 2 for /dev/i2c-2).
+Run the script with the following command-line arguments:
 
-    DEVICE_ADDRESS: The address of the target device (e.g., 0x48 for a temperature sensor).
+    Scan SMBus:
 
-    REGISTER: The register to read data from (e.g., 0x00).
+python smbus.py <bus_number> --scan
 
-Functions
+Save Scan Results to File:
 
-    scan_smbus(bus_number):
+python smbus.py <bus_number> --scan --save <filename>
 
-        Scans the specified SMBus for active devices.
+Read from Device:
 
-        Returns a list of detected device addresses.
+python smbus.py <bus_number> --read <device_address> <register>
 
-    read_from_smbus(bus_number, device_address, register):
+Example:
 
-        Reads a byte of data from the specified register on the target device.
+python smbus.py 2 --read 0x48 0x00
 
-    main():
+Write to Device:
 
-        Scans the SMBus for devices.
+python smbus.py <bus_number> --write <device_address> <register> <data>
 
-        If the target device is found, reads data from its register and prints the result.
+Example:
 
-Running the Script
+python smbus.py 2 --write 0x48 0x01 100
 
-    Connect your SMBus/I2C devices to the system.
+Real-Time Monitoring:
 
-    Update the constants SMBUS_BUS, DEVICE_ADDRESS, and REGISTER in the script to match your configuration.
+python smbus.py <bus_number> --monitor <device_address> <register> <interval> <duration>
 
-    Run the script:
-    python smbus_device_scan.py
+Example:
 
-Example Output
+    python smbus.py 2 --monitor 0x48 0x00 1 10
 
-    When devices are found:
-    Scanning SMBus...
-    Devices found on SMBus 2: 0x48, 0x50
-    Data read from device at address 0x48, register 0x00: 25
+Notes
 
-    When no devices are found:
-    Scanning SMBus...
-    No devices found on the SMBus.
-
-Troubleshooting
-
-    No devices detected:
-
-        Ensure the devices are properly connected to the SMBus.
-
-        Verify that the correct bus number (SMBUS_BUS) is specified.
-
-    Permission denied:
-
-        Ensure you have the necessary permissions to access the SMBus.
-
-        Run the script with elevated privileges:
-        sudo python smbus_device_scan.py
-
-    Incorrect readings:
-
-        Verify the DEVICE_ADDRESS and REGISTER values against the device's datasheet.
-
-Customization
-
-    Modify the DEVICE_ADDRESS and REGISTER constants to target different devices and registers.
-
-    Extend the script to write data to a device using the write_byte_data() method from smbus2.
-
-License
-
-This script is provided under the MIT License. You are free to use, modify, and distribute it as needed.
-
-For more information about SMBus/I2C devices, refer to the device's datasheet or the SMBus/I2C specifications.
-
+    Replace <bus_number>, <device_address>, <register>, etc., with the appropriate values for your system and devices.
+    The SMBus number corresponds to i2c-X on Linux (e.g., 2 for /dev/i2c-2).
 
